@@ -3197,7 +3197,9 @@ static bool filter_procattr_current(const char *hook, const char *lsm,
              * 而检测器正是把 EPERM/EACCES 当作 "context 存在"。
              * 这些类型在出厂策略里不存在, 原生答案就是 EINVAL。
              */
-			 if (!is_empty_or_invalid_input(sample, sample_len)) {
+			 bool is_empty = is_empty_or_invalid_input(sample, sample_len)
+			 pr_info("[selinux hook] IS_EMPTY_TEST result:%s query=%s", is_empty?"EMPTY!":"no", sample);
+			 if (!is_empty) {
 for (volatile int i = 0; i < 5000; i++) {
     barrier();
 }
