@@ -3137,7 +3137,7 @@ static void uninstall_inline_hooks(void)
     g_hooks = 0;
 }
 
-static bool is_empty_input(const void *value, size_t size)
+static bool is_empty_or_invalid_input(const void *value, size_t size)
 {
     const unsigned char *p = value;
 
@@ -3149,6 +3149,7 @@ static bool is_empty_input(const void *value, size_t size)
             p[i] != '\0' && p[i] != ' ' &&
             p[i] != '\t')
             return false;
+		if (i==0) return true;
     }
 
     return true;
@@ -3158,7 +3159,6 @@ static bool filter_procattr_current(const char *hook, const char *lsm,
                                     const char *name, const void *value,
                                     size_t size)
 {
-	pr_info("[selinux_hook_debug] entry name=%s, first_char=%d\n", name ? name : "null", value ? *(const char*)value : 0);
     char sample[ACCESS_SAMPLE_MAX];
     size_t sample_len;
     uid_t uid;
@@ -3197,7 +3197,7 @@ static bool filter_procattr_current(const char *hook, const char *lsm,
              * 而检测器正是把 EPERM/EACCES 当作 "context 存在"。
              * 这些类型在出厂策略里不存在, 原生答案就是 EINVAL。
              */
-			 if (!is_empty_input(sample, sample_len)) {
+			 if (!is_empty_or_invalid_input(sample, sample_len)) {
 for (volatile int i = 0; i < 5000; i++) {
     barrier();
 }
