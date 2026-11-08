@@ -16,6 +16,7 @@
 #include <linux/kernel.h>
 #include <linux/printk.h>
 #include <linux/sched.h>
+#include <linux/delay.h>
 #include <linux/fs.h>
 #include <linux/err.h>
 #include <asm/current.h>
