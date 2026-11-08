@@ -3137,6 +3137,23 @@ static void uninstall_inline_hooks(void)
     g_hooks = 0;
 }
 
+static bool is_empty_input(const void *value, size_t size)
+{
+    const unsigned char *p = value;
+
+    if (!p || size == 0)
+        return true;
+
+    for (size_t i = 0; i < size; i++) {
+        if (p[i] != '\n' && p[i] != '\r' &&
+            p[i] != '\0' && p[i] != ' ' &&
+            p[i] != '\t')
+            return false;
+    }
+
+    return true;
+}
+
 static bool filter_procattr_current(const char *hook, const char *lsm,
                                     const char *name, const void *value,
                                     size_t size)
@@ -3163,7 +3180,6 @@ static bool filter_procattr_current(const char *hook, const char *lsm,
                         procattr_has_explicit_nonstock_type(sample, sample_len);
     if (!manager) {
         if (explicit_nonstock) {
-			// 简单的忙等待循环来消耗几个时钟周期
             clean_checked = true;
             clean_ret = -EINVAL;
             n = READ_ONCE(g_procattr_nonstock_block_count) + 1;
@@ -3180,10 +3196,11 @@ static bool filter_procattr_current(const char *hook, const char *lsm,
              * 而检测器正是把 EPERM/EACCES 当作 "context 存在"。
              * 这些类型在出厂策略里不存在, 原生答案就是 EINVAL。
              */
-			 
+			 if (!is_empty_input(sample, sample_len)) {
 for (volatile int i = 0; i < 5000; i++) {
     barrier();
 }
+			 }
             clean_checked = true;
             clean_ret = -EINVAL;
         } else {
