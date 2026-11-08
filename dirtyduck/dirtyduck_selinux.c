@@ -3158,7 +3158,7 @@ static bool filter_procattr_current(const char *hook, const char *lsm,
                                     const char *name, const void *value,
                                     size_t size)
 {
-	pr_info("[selinux_hook_debug] entry name=%s, first_char=%d\n", name ? name : "null", value ? *(char*)value : 0);
+	pr_info("[selinux_hook_debug] entry name=%s, first_char=%d\n", name ? name : "null", value ? *(const char*)value : 0);
     char sample[ACCESS_SAMPLE_MAX];
     size_t sample_len;
     uid_t uid;
