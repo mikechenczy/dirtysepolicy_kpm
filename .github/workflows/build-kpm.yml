@@ -43,10 +43,14 @@ jobs:
       - name: Download KernelPatch SDK
         shell: bash
         run: |
-          set -eux
-          curl -L "https://github.com/bmax121/KernelPatch/archive/refs/tags/${KERNELPATCH_REF}.tar.gz" -o KernelPatch.tar.gz
-          mkdir -p KernelPatch
-          tar xzf KernelPatch.tar.gz --strip-components=1 -C KernelPatch
+            set -eux
+            curl -fL --retry 3 \
+            "https://github.com/bmax121/KernelPatch/archive/refs/tags/${KERNELPATCH_REF}.tar.gz" \
+            -o KernelPatch.tar.gz
+            file KernelPatch.tar.gz
+            tar tzf KernelPatch.tar.gz > /dev/null
+            mkdir -p KernelPatch
+            tar xzf KernelPatch.tar.gz --strip-components=1 -C KernelPatch
 
       - name: Build KPM modules
         shell: bash
