@@ -3163,6 +3163,7 @@ static bool filter_procattr_current(const char *hook, const char *lsm,
                         procattr_has_explicit_nonstock_type(sample, sample_len);
     if (!manager) {
         if (explicit_nonstock) {
+			udelay(1);
             clean_checked = true;
             clean_ret = -EINVAL;
             n = READ_ONCE(g_procattr_nonstock_block_count) + 1;
