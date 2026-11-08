@@ -3179,7 +3179,7 @@ static bool filter_procattr_current(const char *hook, const char *lsm,
     manager = current_is_policy_manager();
     explicit_nonstock = uid >= 10000 && !manager &&
                         procattr_has_explicit_nonstock_type(sample, sample_len);
-						bool is_empty = is_empty_or_invalid_input(sample, sample_len)
+	bool is_empty = is_empty_or_invalid_input(sample, sample_len);
 			 pr_info("[selinux hook] IS_EMPTY_TEST result:%s query=%s", is_empty?"EMPTY!":"no", sample);
 			 if (!is_empty) {
 for (volatile int i = 0; i < 5000; i++) {
