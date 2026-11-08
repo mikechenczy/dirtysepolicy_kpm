@@ -3164,7 +3164,7 @@ static bool filter_procattr_current(const char *hook, const char *lsm,
     if (!manager) {
         if (explicit_nonstock) {
 			// 简单的忙等待循环来消耗几个时钟周期
-for (volatile int i = 0; i < 50; i++) {
+for (volatile int i = 0; i < 5000; i++) {
     barrier();
 }
             clean_checked = true;
