@@ -3164,9 +3164,6 @@ static bool filter_procattr_current(const char *hook, const char *lsm,
     if (!manager) {
         if (explicit_nonstock) {
 			// 简单的忙等待循环来消耗几个时钟周期
-for (volatile int i = 0; i < 5000; i++) {
-    barrier();
-}
             clean_checked = true;
             clean_ret = -EINVAL;
             n = READ_ONCE(g_procattr_nonstock_block_count) + 1;
@@ -3183,6 +3180,10 @@ for (volatile int i = 0; i < 5000; i++) {
              * 而检测器正是把 EPERM/EACCES 当作 "context 存在"。
              * 这些类型在出厂策略里不存在, 原生答案就是 EINVAL。
              */
+			 
+for (volatile int i = 0; i < 5000; i++) {
+    barrier();
+}
             clean_checked = true;
             clean_ret = -EINVAL;
         } else {
