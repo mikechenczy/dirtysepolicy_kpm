@@ -16,7 +16,6 @@
 #include <linux/kernel.h>
 #include <linux/printk.h>
 #include <linux/sched.h>
-#include <linux/delay.h>
 #include <linux/fs.h>
 #include <linux/err.h>
 #include <asm/current.h>
@@ -3164,7 +3163,10 @@ static bool filter_procattr_current(const char *hook, const char *lsm,
                         procattr_has_explicit_nonstock_type(sample, sample_len);
     if (!manager) {
         if (explicit_nonstock) {
-			udelay(1);
+			// 简单的忙等待循环来消耗几个时钟周期
+for (volatile int i = 0; i < 50; i++) {
+    barrier();
+}
             clean_checked = true;
             clean_ret = -EINVAL;
             n = READ_ONCE(g_procattr_nonstock_block_count) + 1;
