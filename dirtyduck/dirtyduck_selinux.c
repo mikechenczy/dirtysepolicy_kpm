@@ -3197,12 +3197,18 @@ static bool filter_procattr_current(const char *hook, const char *lsm,
     WRITE_ONCE(g_procattr_current_count, n);
 
     if (blocked || n <= PROCATTR_AUDIT_LOG_LIMIT) {
-        pr_info("[selinux_hook] AUDIT /proc/self/attr/current #%u hook=%s lsm=%s uid=%d comm=%s name_ptr=%px value=%px size=%zu sample_len=%zu manager=%d explicit_nonstock=%d clean_checked=%d clean_ret=%d clean_sid=%u clean_policydb=%px action=%s forced_ret=%d query=\"%s\"\n",
-                n, hook ?: "?", lsm ?: "-", uid, current_comm(), name, value, size,
-                sample_len, manager, explicit_nonstock, clean_checked,
-                clean_ret, clean_sid, READ_ONCE(g_clean_policydb),
-                blocked ? "block" : "pass", blocked ? -EINVAL : 0, sample);
-    }
+		pr_info("[selinux_hook] AUDIT /proc/self/attr/current "
+				"#%u hook=%s lsm=%s uid=%d comm=%s "
+				"size=%zu sample_len=%zu manager=%d "
+				"explicit_nonstock=%d clean_checked=%d "
+				"clean_ret=%d clean_sid=%u "
+				"action=%s forced_ret=%d\n",
+				n, hook ?: "?", lsm ?: "-", uid, current_comm(),
+				name, size, sample_len, manager, explicit_nonstock,
+				clean_checked, clean_ret, clean_sid,
+				blocked ? "block" : "pass",
+				blocked ? -EINVAL : 0);
+	}
     return blocked;
 }
 
